@@ -1,7 +1,7 @@
 # CISCO 3550 Series Switch Configuration
 CISCO 3550 Series Switch Configuration
 
-official doc:https://www.cisco.com/en/US/docs/switches/lan/catalyst4000/7.5/configuration/guide/cli_support_TSD_Island_of_Content_Chapter.html
+official doc: https://www.cisco.com/en/US/docs/switches/lan/catalyst4000/7.5/configuration/guide/cli_support_TSD_Island_of_Content_Chapter.html
 
 24 FastEthernet ports 0/x , 2 GigabitEthernet ports 0/x
 
