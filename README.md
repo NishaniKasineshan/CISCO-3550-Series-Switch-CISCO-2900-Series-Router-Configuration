@@ -1,9 +1,12 @@
 # CISCO 3550 Series Switch Configuration
 CISCO 3550 Series Switch Configuration
+[Basics on youtube](https://www.youtube.com/watch?v=jjbJbbFYAkY)
 
 official doc: https://www.cisco.com/en/US/docs/switches/lan/catalyst4000/7.5/configuration/guide/cli_support_TSD_Island_of_Content_Chapter.html
 
-24 FastEthernet ports 0/x , 2 GigabitEthernet ports 0/x
+CISCO 3550 Series Switch: 24 FastEthernet ports 0/x , 2 GigabitEthernet ports 0/x
+
+CISCO 2900 Series Router: 2 GigabitEthernet ports 0/x
 
 Modes: user mode ---> privilege mode ---> config mode
 
@@ -49,3 +52,142 @@ Modes: user mode ---> privilege mode ---> config mode
       * line vty 0 15 : configures the first sixteen virtual terminal lines, numbered from 0 to 15 (support 16 simultaneous remote connections)
       * transport input ssh : allow TCP/IP SSH protocol only to access the virtual terminal lines. (https://study-ccnp.com/transport-input-ssh-telnet-all-none-keywords/)
       * login local :tell the switch to refer to a local database of usernames and passwords for authentication
+9. Configuring vlan
+    [Inter-VLAN Routing](https://www.ciscopress.com/articles/article.asp?p=3089357&seqNum=6) (possible with Layer 3 Switch)
+   ![image](https://github.com/user-attachments/assets/632ddd93-300c-4254-b162-47e01e741435)
+
+   *  Check vlan
+		* (in privilege mode)  show vlan
+   * Create two vlans
+		* --->go to configuration mode
+		* vlan 10
+		* name groupA
+		* vlan 20
+		* name groupB
+		* exit
+   * Configure IP address to the vlans (will serve as the default gateway to the hosts in the respective vlans)
+		* --->go to configuration mode
+		* interface vlan 10
+		* ip address 192.168.3.100 255.255.255.0
+		* no shutdown
+		* interface vlan 20
+		* ip address 192.168.4.100 255.255.255.0
+		* no shutdown
+		* exit
+    * Configure access ports connecting to the hosts & assign them to respective vlans
+		* --->go to configuration mode
+		* interface range FastEthernet0/1-3
+		* switchport mode access (command forces the port to be an access port while and any device plugged into this port will only be able to communicate with other devices that are in the same VLAN)
+		* switchport access vlan 10
+		* interface range FastEthernet0/20-22
+		* switchport mode access
+		* switchport access vlan 20
+		* exit
+     * Test Ping
+		* PC1→vlan 10 **SUCCESS**
+		* PC2→vlan 20 **SUCCESS**
+		* PC1→PC2 vice versa **FAILED** (No inter vlan routing configured)
+		* PC1→vlan 20 (PC2→vlan 10) **FAILED** (No inter vlan routing configured)
+      * Enable inter-vlan IP routing (**SUCCESS** after disabling wifi)
+		* --->go to configuration mode
+		* ip routing
+		* show ip route (in privilege mode)
+10. Router On a stick (VLAN Routing with external Router)
+[VLAN Routing using external Router](https://networklessons.com/switching/intervlan-routing)
+![image](https://github.com/user-attachments/assets/e7b20703-4f12-4a82-b29c-c6ea5a0df4eb)
+
+	* On SWITCH:
+		* Configure vlans, PCs following previous steps.
+		* Disable ip routing in the switch
+			* --->go to configuration mode
+			* no ip routing
+			* exit
+		* Create 802.1Q trunk between the switch and the router 
+			* --->go to configuration mode
+			* interface FastEthernet 0/12
+			* switchport trunk encapsulation dot1q (common trunking protocol : 802.1Q inserts a VLAN tag on the frames)
+			[802.1Q encapsulation](https://networklessons.com/switching/802-1q-encapsulation-explained)
+			* switchport mode trunk
+			* switchport trunk allowed vlan 10,20 (allow vlan 10,20 only via trunk port)
+	* On ROUTER:
+		* Create 2 sub-interfaces & assign the vlans
+			* --->go to configuration mode
+			* interface fa0/0.10
+			* encapsulation dot1Q 10
+			* ip address 192.168.3.33 255.255.255.0
+			* exit
+			* interface fa0/0.20
+			* encapsulation dot1Q 20
+			* ip address 192.168.4.44 255.255.255.0
+			* exit
+   	* Check Routing
+		* show ip route
+	* Set Default Gateway of the PCs to the ip addresses of vlan subinterfaces at the Router (routing in SWITCH is disabled)
+		* PC1 :192.168.3.33
+		* PC2 :192.168.4.44
+	* Test Ping
+		* PC1→PC2 vice versa **SUCCESS** 
+		* PC1→ default gateway **SUCCESS** 
+		* PC2 → default gateway **SUCCESS**
+11. Static Routing
+    [Static Routing in Cisco 2 router connections](https://www.geeksforgeeks.org/implementation-of-static-routing-in-cisco-2-router-connections/)
+    
+    ![image](https://github.com/user-attachments/assets/88143c71-2c9f-45ce-b3b0-f0bc08128bd5)
+    * On ROUTER:
+		* Configure interface ip addresses as in previous tasks
+		* Assign Static Route to particular router
+			* --->go to configuration mode
+			* ip route 192.168.5.0 255.255.255.0 192.168.10.11
+			* exit
+    * On SWITCH:
+		* Configure interface ip addresses as in previous tasks
+		* Assign Static Route to particular L3 switch 
+			* ---> go to configuration mode
+			* ip route 192.168.3.0/24 192.168.10.10
+			* exit
+    * Set default gateways
+		* PC1: 192.168.3.100
+		* PC2:192.168.5.10
+    * Test Ping
+		* PC1→PC2 vice versa **SUCCESS**
+    * Add route from PCs (disable routing in router & switch)
+		* PC2:route add 192.168.3.0/24 192.168.5.10 
+		* PC1:route add 192.168.5.0/24 192.168.3.100
+     * Test Ping 
+		* PC1→PC2 vice versa **SUCCESS**
+       
+12.Dynamic Routing (**R**oute**I**nformation**P**rotocol)
+
+[Dynamic Routing in Cisco for connecting two routers](https://www.geeksforgeeks.org/implementation-of-rip-routing-in-cisco-for-connecting-two-routers/)
+
+[Configure RIP protocol](https://networklessons.com/rip/how-to-configure-rip-on-a-cisco-router)
+
+* On ROUTER:
+	* Configure interface ip addresses as in previous tasks
+	* Assign Static Route to particular router
+		* --->go to configuration mode
+		* router rip
+		* network 192.168.3.0
+		* network 192.168.10.0
+		* exit
+* On SWITCH:
+	* Configure interface ip addresses as in previous tasks
+	* Assign Static Route to particular L3 switch 
+		* ---> go to configuration mode
+		* router rip
+		* network 192.168.5.0
+		* network 192.168.10.0
+		* exit
+* Set default gateways
+	* PC1: 192.168.3.100
+	* PC2:192.168.5.10
+* Test Ping
+	* PC1→PC2 vice versa **SUCCESS**
+* Check rip database
+	* show ip rip database
+
+
+
+
+    
+
