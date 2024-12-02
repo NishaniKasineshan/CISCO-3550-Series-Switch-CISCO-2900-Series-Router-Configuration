@@ -1,4 +1,4 @@
-# CISCO 3550 Series Switch Configuration
+# CISCO 3550 Series Switch | CISCO 2900 Series Router Configuration
 CISCO 3550 Series Switch Configuration
 [Basics on youtube](https://www.youtube.com/watch?v=jjbJbbFYAkY)
 
