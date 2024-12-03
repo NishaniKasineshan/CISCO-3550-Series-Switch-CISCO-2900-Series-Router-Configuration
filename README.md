@@ -8,6 +8,13 @@ CISCO 3550 Series Switch: 24 FastEthernet ports 0/x , 2 GigabitEthernet ports 0/
 
 CISCO 2900 Series Router: 2 GigabitEthernet ports 0/x
 
+During First Boot:
+* First, it will initialize the flash memory[memory that retains data in the absence of power supply ] (because it contains IOS image of the Switch )
+* Load the IOS image from the flash memory (The IOS image is compressed so the switch uncompresses the image and loads it in RAM)
+* IOS is now up and running, it also initializes the flash memory
+* IOS starts with a POST (Power on Self Test) for some of the switch components (registers, memory,loopback,power controller,CAM subsystem,port loopback)
+
+
 Modes: user mode ---> privilege mode ---> config mode
 
 		      >enable  	   #configure terminal (Global Configuration mode)
