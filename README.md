@@ -171,7 +171,7 @@ Modes: user mode ---> privilege mode ---> config mode
 
 * On ROUTER:
 	* Configure interface ip addresses as in previous tasks
-	* Assign Static Route to particular router
+	* Configure rip
 		* --->go to configuration mode
 		* router rip
 		* network 192.168.3.0
@@ -179,7 +179,7 @@ Modes: user mode ---> privilege mode ---> config mode
 		* exit
 * On SWITCH:
 	* Configure interface ip addresses as in previous tasks
-	* Assign Static Route to particular L3 switch 
+	* Configure rip
 		* ---> go to configuration mode
 		* router rip
 		* network 192.168.5.0
