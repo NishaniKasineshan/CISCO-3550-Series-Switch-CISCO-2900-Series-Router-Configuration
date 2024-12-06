@@ -211,21 +211,29 @@ Modes: user mode ---> privilege mode ---> config mode
 		* network 192.168.10.0 0.0.0.255 area 0 
 		(0.0.0.255 => a wildcard mask(reverse subnet mask)) [wildcard masking](https://www.pynetlabs.com/what-is-wildcard-mask-in-networking/)
 
-		indicate which bits of an IP address must match and which bits do not matter.
-
-			* 0 means that the equivalent bit must match
-			* 1 means that the equivalent bit does not matter
+		indicate which bits of an IP address must match and which bits do not matter.**(0 means that the equivalent bit must match,1 means that the equivalent bit does not matter)**
    
 		OSPF is a dynamic routing protocol that mainly makes use of link-state information to calculate the best routes for IP packets within a network.
 		[Why area is needed in ospf?](https://networkengineering.stackexchange.com/questions/4997/what-is-the-advantage-of-an-area-in-ospf-configuration)
-	* Check OSPF 
-		* show ip ospf neighbor
-		* show ip route (OSPF routes are indicated by character “O”)
-	* Set default gateways
-		* PC1: 192.168.3.100
-		* PC2:192.168.5.100
-	* Test Ping
-		* PC1→PC2 vice versa **SUCCESS**
+		* exit
+
+* On R2:
+	* Configure interface ip addresses & PC ip addresses as in previous tasks
+	* Configure OSPF
+		* --->go to configuration mode
+		* router ospf 5 
+		* network 192.168.5.0 0.0.0.255 area 0
+		* network 192.168.10.0 0.0.0.255 area 0 
+		* exit
+
+* Check OSPF 
+	* show ip ospf neighbor
+	* show ip route (OSPF routes are indicated by character “O”)
+* Set default gateways
+	* PC1: 192.168.3.100
+	* PC2:192.168.5.100
+* Test Ping
+	* PC1→PC2 vice versa **SUCCESS**
 
    
 	
