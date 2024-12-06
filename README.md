@@ -193,7 +193,42 @@ Modes: user mode ---> privilege mode ---> config mode
 * Check rip database
 	* show ip rip database
 
+13. OSPF Configuration
 
+    [OSPF Configuration](https://study-ccna.com/ospf-configuration/)
+    
+    [Basic OSPF Configuration](https://networklessons.com/ospf/basic-ospf-configuration)
+
+ ![image](https://github.com/user-attachments/assets/f25b073d-d93e-4cb6-8aed-89704ed04c6a)
+
+* On R1:
+	* Configure interface ip addresses & PC ip addresses as in previous tasks
+	* Configure OSPF
+		* --->go to configuration mode
+		* router ospf 1 (number “1” is process id for the ospf instance)
+		  [OSPF process id](https://netseccloud.com/understanding-ospf-process-id-what-it-is-and-how-it-works#:~:text=The%20OSPF%20process%20ID%20might,distinguish%20between%20different%20OSPF%20instances.)
+		* network 192.168.3.0 0.0.0.255 area 0
+		* network 192.168.10.0 0.0.0.255 area 0 
+		(0.0.0.255 => a wildcard mask(reverse subnet mask)) [wildcard masking](https://www.pynetlabs.com/what-is-wildcard-mask-in-networking/)
+
+		indicate which bits of an IP address must match and which bits do not matter.
+
+			* 0 means that the equivalent bit must match
+			* 1 means that the equivalent bit does not matter
+   
+		OSPF is a dynamic routing protocol that mainly makes use of link-state information to calculate the best routes for IP packets within a network.
+		[Why area is needed in ospf?](https://networkengineering.stackexchange.com/questions/4997/what-is-the-advantage-of-an-area-in-ospf-configuration)
+	* Check OSPF 
+		* show ip ospf neighbor
+		* show ip route (OSPF routes are indicated by character “O”)
+	* Set default gateways
+		* PC1: 192.168.3.100
+		* PC2:192.168.5.100
+	* Test Ping
+		* PC1→PC2 vice versa **SUCCESS**
+
+   
+	
 
 
     
