@@ -264,6 +264,39 @@ Modes: user mode ---> privilege mode ---> config mode
 	* Check ip assignment method
 		* show ip interface brief
 
+15. Dynamic ARP inspection
+
+    [Dynamic ARP Inspection ](https://networklessons.com/switching/dai-dynamic-arp-inspection)
+
+    ![image](https://github.com/user-attachments/assets/5ec95a17-f7da-4649-90d5-295fe8907835)
+
+ * On SWITCH:
+	* Configure a vlan comprising of all three interfaces of the switch as “vlan123”.
+	* Configure DHCP Snooping
+		* --->go to configuration mode
+		* ip dhcp snooping
+		* ip dhcp snooping vlan 123
+		* exit
+		* --->go to configuration mode
+		* interface fa0/3
+		* ip dhcp snooping trust (Make the interface that connects to the DHCP server trusted )
+		* end
+* On DHCP SERVER
+	* Configure DHCP server as in the previous task as necessary.(iii,iv)
+* On HOST:
+	* Configure host interface as a DHCP client as in the previous task.
+* On SWITCH:
+	* Check DHCP binding as in the previous task (Ip address assigned to the Host can be seen)
+	* Enable Arp Inspection for vlan123
+		* --->go to configuration mode
+		* ip arp inspection vlan 123
+		* exit
+* On ATTACKER:
+	* Configure Ip address of Attacker same as of Host (192.168.1.1 255.255.255.0)
+	* PING from ATTACKER to DHCP ROUTER:
+		* ping 192.168.1.254 **FAILED** (check on switch {show ip arp inspection}: all ARP requests from the attacker are dropped)
+        
+
 
 
     
