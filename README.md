@@ -234,9 +234,36 @@ Modes: user mode ---> privilege mode ---> config mode
 	* PC2:192.168.5.100
 * Test Ping
 	* PC1→PC2 vice versa **SUCCESS**
+14. DHCP server & Client
 
-   
-	
+   [Configure Cisco Router as DHCP Server ](https://study-ccna.com/configure-cisco-router-as-dhcp-server/)
+  
+   [Configure DHCP Client on Cisco IOS](https://networklessons.com/cisco/ccie-routing-switching/dhcp-client-on-cisco-ios)
+
+   ![image](https://github.com/user-attachments/assets/66c23ea7-7170-41fa-87b1-6f98a9a450cd)
+
+* On R2:
+	* Configure DHCP Server
+		* --->go to configuration mode
+		* ip dhcp excluded-address 192.168.1.1 192.168.1.10 (Exclude IP addresses from being assigned by DHCP. (Exclude IP addresses that need not to be changed dynamically: Default gateway, servers)
+		* ip dhcp pool MY_POOL (Create a dhcp pool)
+		* network 192.168.1.0 255.255.255.0 (Define a subnet that will be used to assign IP addresses to hosts with the network)
+		* default-router 192.168.1.1 (Set the default gateway of the network)
+		* dns-server 192.168.1.2 (not necessarily) 
+		* exit
+	* Check DHCP 
+		* show ip dhcp binding (shows leased Addresses by the dhcp clients)
+		* show ip dhcp pool (display information about configured pools)
+* On R1:
+	* Configure DHCP Client
+		* --->go to configuration mode
+		* interface fa0/0
+		* ip address dhcp
+		* no shutdown
+		* end
+	* Check ip assignment method
+		* show ip interface brief
+
 
 
     
